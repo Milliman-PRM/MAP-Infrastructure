@@ -23,6 +23,8 @@ $GWIPconfName = "gwipconf"
 $P2SRootCertName = "prm-asr-p2srootcert.cer"
 $filePathForCert = "C:\temp\$($P2SRootCertName)"
 
+$clientVnetName = "map-client-vnet-asr"
+
 $cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
 -Subject "CN=P2SRootCertMAP" -KeyExportPolicy Exportable `
 -HashAlgorithm sha256 -KeyLength 2048 `

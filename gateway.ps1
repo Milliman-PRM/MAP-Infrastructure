@@ -7,7 +7,7 @@ New-AzureRmResourceGroup -Name $RGGW -Location $Location
 $sub = New-AzureRmVirtualNetworkSubnetConfig -name $subnet_default -AddressPrefix $gwdefsubnetPrefix
 $gwsub = New-AzureRmVirtualNetworkSubnetConfig -name $GWSubName -AddressPrefix $GWSubPrefix
 
-$vnet = New-AzureRmVirtualNetwork -Name $GWVNetName -ResourceGroupName $RGGW `
+New-AzureRmVirtualNetwork -Name $GWVNetName -ResourceGroupName $RGGW `
     -Location $Location -AddressPrefix $VNetPrefixGW,$VNetPrefixGW2 -Subnet $sub, $gwsub
 
 
@@ -32,8 +32,10 @@ Add-AzureRmVpnClientRootCertificate `
     -ResourceGroupName $RGGW `
     -PublicCertData $CertBase64
 
-$cred = get-credential -Message "Enter credentials for JumpBox VM Login"
+$vnetclient = Get-AzureRmVirtualNetwork -Name $clientVnetName -ResourceGroupName $RGGW
 
-New-AzureRmVm -ResourceGroupname $RGGW -name $VGJumpBoxName -Location $Location `
-    -SubnetName $subnet_default -SecurityGroupName $gwnsg.Name -Credential $cred
+Add-AzureRmVirtualNetworkPeering -name 'client-to-vpn' `
+    -VirtualNetwork $vnetclient -RemoteVirtualNetworkId $vnetgw.Id
 
+Add-AzureRmVirtualNetworkPeering -name 'vpn-to-client' `
+    -VirtualNetwork $vnetgw -RemoteVirtualNetworkId $vnetclient.Id
