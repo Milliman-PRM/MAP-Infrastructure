@@ -32,7 +32,7 @@ Add-AzureRmVpnClientRootCertificate `
 $vnetclient = Get-AzureRmVirtualNetwork -Name $clientVnetName -ResourceGroupName $RGGW
 
 Add-AzureRmVirtualNetworkPeering -name 'client-to-vpn' `
-    -VirtualNetwork $vnetclient -RemoteVirtualNetworkId $vnetgw.Id
+    -VirtualNetwork $vnetclient -RemoteVirtualNetworkId $vnetgw.Id -AllowForwardedTraffic -UseRemoteGateways
 
 Add-AzureRmVirtualNetworkPeering -name 'vpn-to-client' `
-    -VirtualNetwork $vnetgw -RemoteVirtualNetworkId $vnetclient.Id
+    -VirtualNetwork $vnetgw -RemoteVirtualNetworkId $vnetclient.Id -AllowGatewayTransit
