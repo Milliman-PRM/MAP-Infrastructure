@@ -1,8 +1,5 @@
 ﻿$ScriptPath = Split-Path $MyInvocation.InvocationName
-& "$ScriptPath\shared.ps1"
-
-
-New-AzureRmResourceGroup -Name $RGGW -Location $Location
+. "$ScriptPath\shared.ps1"
 
 $sub = New-AzureRmVirtualNetworkSubnetConfig -name $subnet_default -AddressPrefix $gwdefsubnetPrefix
 $gwsub = New-AzureRmVirtualNetworkSubnetConfig -name $GWSubName -AddressPrefix $GWSubPrefix
